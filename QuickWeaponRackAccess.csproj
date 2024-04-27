@@ -74,6 +74,16 @@
     </Reference>
   </ItemGroup>
 
+  <Target Name="SetSourceRevisionId" BeforeTargets="InitializeSourceControlInformation">
+    <Exec 
+      Command="git describe --long --always --dirty --exclude=* --abbrev=8"
+      ConsoleToMSBuild="True"
+      IgnoreExitCode="False"
+      >
+      <Output PropertyName="SourceRevisionId" TaskParameter="ConsoleOutput"/>
+    </Exec>
+  </Target>
+
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <ItemGroup>
       <VersionFile Include="VERSION" />
@@ -106,7 +116,7 @@
     />
     <ZipDirectory
       SourceDirectory="$(ProjectDir)release\QuickWeaponRackAccess\"
-      DestinationFile="$(ProjectDir)release\QuickWeaponRackAccess-$(Version).zip"
+      DestinationFile="$(ProjectDir)release\QuickWeaponRackAccess-$(Version)-$(SourceRevisionId).zip"
     />
   </Target>
 

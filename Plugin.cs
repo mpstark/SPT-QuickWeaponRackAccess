@@ -14,7 +14,7 @@ using UnityEngine.UI;
 
 namespace QuickWeaponRackAccess
 {
-    [BepInPlugin("com.mpstark.QuickWeaponRackAccess", "QuickWeaponRackAccess", "1.0.0.0")]
+    [BepInPlugin("com.mpstark.QuickWeaponRackAccess", "QuickWeaponRackAccess", "1.0.0")]
     public class Plugin : BaseUnityPlugin
     {
         public const int TarkovVersion = 29197;

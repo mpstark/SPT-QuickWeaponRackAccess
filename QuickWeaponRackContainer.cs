@@ -132,10 +132,13 @@ namespace QuickWeaponRackAccess
             closeButton.GetComponent<LayoutElement>().ignoreLayout = true; // this allows to place close button where we want
             closeButton.transform.SetParent(_windowTransform, false);
             closeButton.GetComponent<Button>().onClick.AddListener(Close);
-            closeButton.RectTransform().anchoredPosition = new Vector2(4, 234);
 
             RectTransform.anchoredPosition = _windowAnchorPosition;
             CorrectPosition();
+
+            // need to wait for layout to finish before dynamically moving the close button
+            // would it be better to learn the layout tools in unity? probably
+            this.WaitFrames(1, () => closeButton.RectTransform().anchoredPosition = new Vector2(4, _windowTransform.rect.height / 2 + 13));
         }
 
         private void ShowAreaGrid(EFT.EAreaType newArea)

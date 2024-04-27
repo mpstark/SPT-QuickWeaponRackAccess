@@ -14,7 +14,8 @@ using UnityEngine.UI;
 
 namespace QuickWeaponRackAccess
 {
-    [BepInPlugin("com.mpstark.QuickWeaponRackAccess", "QuickWeaponRackAccess", "1.0.0")]
+    // TODO: make version number here pull from VERSION file, msbuild doesn't seem to have an easy way to do this
+    [BepInPlugin("com.mpstark.QuickWeaponRackAccess", "QuickWeaponRackAccess", "1.0.1")]
     public class Plugin : BaseUnityPlugin
     {
         public const int TarkovVersion = 29197;

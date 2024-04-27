@@ -86,7 +86,7 @@
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <ItemGroup>
-      <VersionFile Include="VERSION" />
+      <VersionFile Include="VERSION.txt" />
     </ItemGroup>
 
     <ReadLinesFromFile File="@(VersionFile)">

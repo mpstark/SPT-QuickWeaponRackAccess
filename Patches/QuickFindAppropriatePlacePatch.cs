@@ -26,7 +26,7 @@ namespace QuickWeaponRackAccess.Patches
                 return;
             }
 
-            var rackContainer = Plugin.Instance.QuickWeaponRackComponent.ActiveWeaponRackContainer;
+            var rackContainer = Plugin.Instance.QuickWeaponRackComponent?.ActiveWeaponRackContainer;
             if (rackContainer == null || item.Parent.Container.ParentItem.Id == rackContainer.Id)
             {
                 return;

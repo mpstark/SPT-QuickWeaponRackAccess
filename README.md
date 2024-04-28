@@ -10,7 +10,7 @@ Mod that allows quick access to the weapon rack without requiring opening the hi
 
 ## License
 
-Distributed under the MIT license. See `LICENSE` for more details.
+Distributed under the MIT license. See [`LICENSE.txt`](LICENSE.txt) for more details.
 
 ## Acknowledgments
 

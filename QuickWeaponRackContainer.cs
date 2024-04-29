@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Comfort.Common;
 using EFT.InputSystem;
 using EFT.UI;
+using EFT.UI.Chat;
 using EFT.UI.DragAndDrop;
 using HarmonyLib;
+using QuickWeaponRackAccess.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,14 +17,19 @@ namespace QuickWeaponRackAccess
 {
     public class QuickWeaponRackComponent : UIInputNode
     {
-        private static FieldInfo ItemUiContextInventoryControllerField = AccessTools.GetDeclaredFields(typeof(ItemUiContext)).Single(x => x.FieldType == typeof(InventoryControllerClass));
-        private static FieldInfo InputNodeAbstractChildrenField = AccessTools.Field(typeof(InputNodeAbstract), "_children");
+        private static FieldInfo _inventoryScreenSimpleStashPanelField = AccessTools.Field(typeof(InventoryScreen), "_simpleStashPanel");
+        private static FieldInfo _simpleStashPanelSortingTableTabField = AccessTools.Field(typeof(SimpleStashPanel), "_sortingTableTab");
+        private static FieldInfo _itemUiContextInventoryControllerField = AccessTools.GetDeclaredFields(typeof(ItemUiContext)).Single(x => x.FieldType == typeof(InventoryControllerClass));
+        private static FieldInfo _inputNodeAbstractChildrenField = AccessTools.Field(typeof(InputNodeAbstract), "_children");
+        private static FieldInfo _chatScreenCloseButtonField = AccessTools.Field(typeof(ChatScreen), "_closeButton");
+
+        private static string _iconPath = Path.Combine(Plugin.PluginFolder, "icon.png");
 
         public override RectTransform RectTransform => _windowTransform;
 
         public LootItemClass ActiveWeaponRackContainer => _activeContainer;
 
-        private List<InputNode> ItemUiContextChildren => InputNodeAbstractChildrenField.GetValue(ItemUiContext.Instance) as List<InputNode>;
+        private List<InputNode> ItemUiContextChildren => _inputNodeAbstractChildrenField.GetValue(ItemUiContext.Instance) as List<InputNode>;
 
         private LootItemClass _activeContainer;
         private ContainedGridsView _gridView;
@@ -31,10 +39,49 @@ namespace QuickWeaponRackAccess
         private Action _onClosed;
         private EFT.EAreaType _lastArea = EFT.EAreaType.WeaponStand;
 
+        public static QuickWeaponRackComponent AttachToInventoryScreen(InventoryScreen inventoryScreen)
+        {
+            // find sort button to use as a template
+            var simpleStashPanel = _inventoryScreenSimpleStashPanelField.GetValue(inventoryScreen) as SimpleStashPanel;
+            var sortButtonTab = _simpleStashPanelSortingTableTabField.GetValue(simpleStashPanel) as Tab;
+            var sortButtonTemplate = sortButtonTab.gameObject;
+
+            // create button game object from template
+            var buttonGO = Instantiate(sortButtonTemplate, sortButtonTemplate.transform.parent);
+            buttonGO.name = "QuickWeaponRackAccessTab";
+            buttonGO.transform.SetAsFirstSibling();
+
+            // change icon of button
+            var image = buttonGO.transform.Find("Image").GetComponent<Image>();
+            var texture = TextureUtils.LoadTexture2DFromPath(_iconPath);
+            image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), image.sprite.pivot);
+
+            // setup container
+            var containerGO = new GameObject("QuickWeaponRackAccessContainer");
+            containerGO.transform.SetParent(inventoryScreen.gameObject.transform);
+            containerGO.transform.localScale = Vector3.one;
+            containerGO.SetActive(false);
+            var component = containerGO.AddComponent<QuickWeaponRackComponent>();
+
+            // setup tab
+            var tab = buttonGO.GetComponent<Tab>();
+            tab.UpdateVisual(false);
+            tab.OnSelectionChanged += (_, selected) => {
+                if (selected)
+                {
+                    tab.Select();
+                    containerGO.SetActive(true);
+                    component.Show(() => tab.Deselect());
+                }
+            };
+
+            return component;
+        }
 
         public void Awake()
         {
-            _closeButtonTemplate = GameObject.Find("Common UI/Common UI/ChatScreen/Content/ChatPanel/ChatPart/CaptionPanel/CloseButton");
+            var closeButton = _chatScreenCloseButtonField.GetValue(MonoBehaviourSingleton<CommonUI>.Instance.ChatScreen) as Button;
+            _closeButtonTemplate = closeButton.gameObject;
         }
 
         public void Show(Action onClosed)
@@ -152,7 +199,7 @@ namespace QuickWeaponRackAccess
 
             _activeContainer = Plugin.PlayerInventory.HideoutAreaStashes[newArea];
             var itemContext = new GClass2818(_activeContainer, GClass2818.EItemType.AreaStash, Plugin.PlayerInventory.FavoriteItemsStorage);
-            var inventoryController = ItemUiContextInventoryControllerField.GetValue(ItemUiContext.Instance) as InventoryControllerClass;
+            var inventoryController = _itemUiContextInventoryControllerField.GetValue(ItemUiContext.Instance) as InventoryControllerClass;
 
             _gridView.Show(_activeContainer, itemContext, inventoryController, null, ItemUiContext.Instance, false);
             _lastArea = newArea;

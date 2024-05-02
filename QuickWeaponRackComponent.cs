@@ -34,7 +34,7 @@ namespace QuickWeaponRackAccess
         private LootItemClass _activeContainer;
         private ContainedGridsView _gridView;
         private RectTransform _windowTransform;
-        private Vector2 _windowAnchorPosition = new(360, 315);
+        private Vector2 _windowAnchorPosition = new Vector2(360, 315);
         private GameObject _closeButtonTemplate;
         private Action _onClosed;
         private EFT.EAreaType _lastArea = EFT.EAreaType.WeaponStand;

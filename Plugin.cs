@@ -1,13 +1,13 @@
-﻿using Aki.Reflection.Utils;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using Aki.Reflection.Utils;
 using BepInEx;
 using BepInEx.Logging;
 using DrakiaXYZ.VersionChecker;
 using EFT.InventoryLogic;
 using EFT.UI;
 using QuickWeaponRackAccess.Patches;
-using System;
-using System.IO;
-using System.Reflection;
 
 namespace QuickWeaponRackAccess
 {
@@ -40,6 +40,9 @@ namespace QuickWeaponRackAccess
             new QuickFindAppropriatePlacePatch().Enable();
         }
 
+        /// <summary>
+        /// Try attach the tab to the inventory screen, but only if hideout isn't upgraded
+        /// </summary>
         public void TryAttachToInventoryScreen(InventoryScreen inventoryScreen)
         {
             // only attach if not already attached or hideout isn't upgraded

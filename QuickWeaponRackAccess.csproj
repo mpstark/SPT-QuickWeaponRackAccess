@@ -8,75 +8,65 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="dependencies\**" />
-    <EmbeddedResource Remove="dependencies\**" />
-    <None Remove="dependencies\**" />
-  </ItemGroup>
+  <PropertyGroup>
+    <TarkovDir Condition=" '$(TarkovDir)' == '' ">D:\Games\SPTarkov-3.8.1\</TarkovDir>
+    <TarkovDebugDir Condition=" '$(TarkovDebugDir)' == '' ">D:\Games\SPTarkov-3.8.1-Debug\</TarkovDebugDir>
+    <TarkovManagedDir>$(TarkovDir)EscapeFromTarkov_Data\Managed\</TarkovManagedDir>
+    <TarkovBepInExCoreDir>$(TarkovDir)BepInEx\core\</TarkovBepInExCoreDir>
+  </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>$(SolutionDir)dependencies\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Aki.Reflection">
+      <HintPath>$(TarkovManagedDir)Aki.Reflection.dll</HintPath>
     </Reference>
-    <Reference Include="bsg.console.core">
-      <HintPath>$(SolutionDir)dependencies\bsg.console.core.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(TarkovManagedDir)Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Comfort">
-      <HintPath>$(SolutionDir)dependencies\Comfort.dll</HintPath>
-    </Reference>
-    <Reference Include="ItemComponent.Types">
-      <HintPath>$(SolutionDir)dependencies\ItemComponent.Types.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>$(SolutionDir)dependencies\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>$(SolutionDir)dependencies\UnityEngine.AssetBundleModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(SolutionDir)dependencies\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>$(SolutionDir)dependencies\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="Aki.reflection">
-      <HintPath>$(SolutionDir)dependencies\Aki.Reflection.dll</HintPath>
+      <HintPath>$(TarkovManagedDir)Comfort.dll</HintPath>
     </Reference>
     <Reference Include="Sirenix.Serialization">
-      <HintPath>$(SolutionDir)dependencies\Sirenix.Serialization.dll</HintPath>
+      <HintPath>$(TarkovManagedDir)Sirenix.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="0Harmony">
-      <HintPath>$(SolutionDir)dependencies\0Harmony.dll</HintPath>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(TarkovManagedDir)Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="BepinEx">
-      <HintPath>$(SolutionDir)dependencies\BepInEx.dll</HintPath>
+    <Reference Include="UnityEngine">
+      <HintPath>$(TarkovManagedDir)UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="BepinEx.Preloader">
-      <HintPath>$(SolutionDir)dependencies\BepInEx.Preloader.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(SolutionDir)dependencies\UnityEngine.IMGUIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>$(SolutionDir)dependencies\UnityEngine.InputLegacyModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>$(SolutionDir)dependencies\UnityEngine.TextRenderingModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>$(SolutionDir)dependencies\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>$(SolutionDir)dependencies\UnityEngine.UIModule.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(TarkovManagedDir)UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>$(SolutionDir)dependencies\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>$(TarkovManagedDir)UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(TarkovManagedDir)UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(TarkovManagedDir)UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(TarkovManagedDir)UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(TarkovManagedDir)UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+
+    <Reference Include="0Harmony">
+      <HintPath>$(TarkovBepInExCoreDir)0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="BepinEx">
+      <HintPath>$(TarkovBepInExCoreDir)BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="BepinEx.Preloader">
+      <HintPath>$(TarkovBepInExCoreDir)BepInEx.Preloader.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <!-- Gets the commit hash from git -->
   <Target Name="SetSourceRevisionId" BeforeTargets="InitializeSourceControlInformation">
-    <Exec 
+    <Exec
       Command="git describe --long --always --dirty --exclude=* --abbrev=8"
       ConsoleToMSBuild="True"
       IgnoreExitCode="False"
@@ -90,7 +80,7 @@
     <ItemGroup>
       <VersionFile Include="VERSION.txt" />
       <VersionCs Include="$(ProjectDir)Version.cs" />
-      <Compile Include="@(VersionCs)" />
+      <Compile Include="@(VersionCs)" Exclude="@(VersionCs)" /> <!-- Resolves double include -->
       <FileWrites Include="@(VersionCs)" />
     </ItemGroup>
 
@@ -112,11 +102,11 @@
     <!-- Copies the output and resources to tarkov game folder -->
     <Copy
       SourceFiles="@(OutputDLL);@(Resources)"
-      DestinationFolder="D:\Games\SPTarkov-3.8\BepInEx\plugins\QuickWeaponRackAccess"
+      DestinationFolder="$(TarkovDir)BepInEx\plugins\QuickWeaponRackAccess"
     />
     <Copy
       SourceFiles="@(OutputDLL);@(Resources)"
-      DestinationFolder="D:\Games\SPTarkov-3.8-Debug\BepInEx\plugins\QuickWeaponRackAccess"
+      DestinationFolder="$(TarkovDebugDir)BepInEx\plugins\QuickWeaponRackAccess"
     />
 
     <!-- Creates a release zip file -->

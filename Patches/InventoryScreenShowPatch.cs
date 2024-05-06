@@ -1,7 +1,7 @@
-﻿using Aki.Reflection.Patching;
+﻿using System.Reflection;
+using Aki.Reflection.Patching;
 using EFT.UI;
 using HarmonyLib;
-using System.Reflection;
 
 namespace QuickWeaponRackAccess.Patches
 {
@@ -9,7 +9,7 @@ namespace QuickWeaponRackAccess.Patches
     {
         protected override MethodBase GetTargetMethod()
         {
-            return AccessTools.FirstMethod(typeof(InventoryScreen), 
+            return AccessTools.FirstMethod(typeof(InventoryScreen),
                 x => x.Name == nameof(InventoryScreen.Show)
                 && x.GetParameters()[0].Name == "healthController");
         }

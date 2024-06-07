@@ -14,7 +14,7 @@ namespace DrakiaXYZ.VersionChecker
         // Make sure the version of EFT being run is the correct version, throw an exception and output log message if it isn't
         /// <summary>
         /// Check the currently running program's version against the plugin assembly VersionChecker attribute, and
-        /// return false if they do not match. 
+        /// return false if they do not match.
         /// Optionally add a fake setting to the F12 menu if Config is passed in
         /// </summary>
         /// <param value="Logger">The ManualLogSource to output an error to</param>
@@ -27,7 +27,7 @@ namespace DrakiaXYZ.VersionChecker
             int buildVersion = QuickWeaponRackAccess.Plugin.TarkovVersion;
             if (currentVersion != buildVersion)
             {
-                string errorMessage = $"ERROR: This version of Stash Search was built for Tarkov {buildVersion}, but you are running {currentVersion}. Please download the correct plugin version.";
+                string errorMessage = $"ERROR: This version of QuickWeaponRackAccess was built for Tarkov {buildVersion}, but you are running {currentVersion}. Please download the correct plugin version.";
                 Logger.LogError(errorMessage);
                 Chainloader.DependencyErrors.Add(errorMessage);
 

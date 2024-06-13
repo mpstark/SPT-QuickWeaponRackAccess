@@ -96,23 +96,24 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
       <OutputDLL Include="$(ProjectDir)$(OutDir)$(TargetName).dll" />
+      <License Include="$(ProjectDir)LICENSE.txt" />
       <Resources Include="$(ProjectDir)Resources\*" />
     </ItemGroup>
 
     <!-- Copies the output and resources to tarkov game folder -->
     <Copy
-      SourceFiles="@(OutputDLL);@(Resources)"
+      SourceFiles="@(OutputDLL);@(Resources);@(License)"
       DestinationFolder="$(TarkovDir)BepInEx\plugins\QuickWeaponRackAccess"
     />
     <Copy
-      SourceFiles="@(OutputDLL);@(Resources)"
+      SourceFiles="@(OutputDLL);@(Resources);@(License)"
       DestinationFolder="$(TarkovDebugDir)BepInEx\plugins\QuickWeaponRackAccess"
     />
 
     <!-- Creates a release zip file -->
     <RemoveDir Directories="$(ProjectDir)release" />
     <Copy
-      SourceFiles="@(OutputDLL);@(Resources)"
+      SourceFiles="@(OutputDLL);@(Resources);@(License)"
       DestinationFolder="$(ProjectDir)release\QuickWeaponRackAccess\BepInEx\plugins\QuickWeaponRackAccess"
     />
     <ZipDirectory

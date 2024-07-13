@@ -137,7 +137,7 @@ namespace QuickWeaponRackAccess
             Destroy(_gridView.transform.Find("Sort button").gameObject);
 
             // hook up tabs
-            // yes, code depublication is bad, yes, for this I don't care right now
+            // yes, code duplication is bad, yes, for this I don't care right now
             var tabTransform = _windowTransform.Find("Tabs");
             var tab1 = tabTransform.Find("Zone 1").gameObject.GetComponent<Tab>();
             var tab2 = tabTransform.Find("Zone 2").gameObject.GetComponent<Tab>();
@@ -198,7 +198,7 @@ namespace QuickWeaponRackAccess
             _gridView.Close();
 
             _activeContainer = Plugin.PlayerInventory.HideoutAreaStashes[newArea];
-            var itemContext = new GClass2818(_activeContainer, GClass2818.EItemType.AreaStash, Plugin.PlayerInventory.FavoriteItemsStorage);
+            var itemContext = new GClass2834(_activeContainer, GClass2834.EItemType.AreaStash, Plugin.PlayerInventory.FavoriteItemsStorage);
             var inventoryController = _itemUiContextInventoryControllerField.GetValue(ItemUiContext.Instance) as InventoryControllerClass;
 
             _gridView.Show(_activeContainer, itemContext, inventoryController, null, ItemUiContext.Instance, false);

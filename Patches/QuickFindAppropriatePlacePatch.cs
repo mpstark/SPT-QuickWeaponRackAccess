@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Reflection;
-using Aki.Reflection.Patching;
 using EFT.InventoryLogic;
 using HarmonyLib;
+using SPT.Reflection.Patching;
 
 namespace QuickWeaponRackAccess.Patches
 {
